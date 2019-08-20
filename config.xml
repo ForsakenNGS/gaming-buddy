@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <section name="general" title="General settings">
+        <value type="checkbox" name="debug" label="Debug" default="false">
+            Enable debug output
+        </value>
+        <value type="select" name="language" label="Language" default="en">
+            <option value="en">English</option>
+            <option value="de">German</option>
+        </value>
+        <value type="text" name="text" label="Text" default="Test Value"></value>
+        <value type="path" name="path" label="Path" default="/home/forsaken"></value>
+    </section>
+</config>

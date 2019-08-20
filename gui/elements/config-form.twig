@@ -1,0 +1,71 @@
+<form data-plugin="{{ plugin.config.pluginName }}">
+{% for configSection in plugin.config.structure.config.section %}
+  <div class="config-group">
+  {% if configSection['attr']['@_checkbox'] %}
+    <div class="form-check" data-section-toggle="{{ configSection['attr']['@_name'] }}">
+      <h3>
+        <label>
+          <input data-input="checkbox" type="checkbox" name="{{ configSection['attr']['@_name'] }}" value="1"
+                {% if plugin.getConfigValue(configSection['attr']['@_name']) %} checked{% endif %} />
+          {{ configSection['attr']['@_title']|default( configSection['attr']['@_name'] ) }}
+        </label>
+      </h3>
+    </div>
+  {% elseif configSection['attr']['@_title'] %}
+    <h3>
+      {{ configSection['attr']['@_title'] }}
+    </h3>
+  {% endif %}
+    <fieldset>
+    {% for configValue in configSection.value %}
+      {% include "config-value.twig" with { field: configValue, value: plugin.getConfigValue(configValue['attr']['@_name']) } %}
+    {% endfor %}
+    </fieldset>
+  </div>
+{% endfor %}
+</form>
+<script type="text/javascript">
+jQuery(function() {
+  let form = jQuery("[data-plugin=\"{{ plugin.config.pluginName }}\"]");
+  // Toggle sections
+  let updateSections = function() {
+    let section = jQuery(this).closest(".config-group");
+    section.find("fieldset").prop("disabled", !jQuery(this).is(":checked"));
+  };
+  jQuery("[data-section-toggle] [data-input]").on("click", updateSections).each(updateSections);
+  // Save function
+  let formSave = function() {
+    let configPlugin = "{{ plugin.config.pluginName }}";
+    let configValues = {};
+    form.find("[data-input]").each(function() {
+      let inputName = jQuery(this).attr("name");
+      let inputType = jQuery(this).attr("data-input");
+      switch (inputType) {
+        default:
+          configValues[inputName] = jQuery(this).val();
+          break;
+        case "checkbox":
+          configValues[inputName] = jQuery(this).is(":checked");
+          break;
+      }
+    });
+    gui.setConfigValues(configPlugin, configValues);
+  };
+  // Input change event
+  form.find("[data-input]").each(function() {
+    let inputType = jQuery(this).attr("data-input");
+    let inputChanged = function() {
+      formSave();
+    };
+    switch (inputType) {
+      default:
+        jQuery(this).on("change", inputChanged);
+        break;
+      case "text":
+      case "path":
+        jQuery(this).on("change keyup", inputChanged);
+        break;
+    }
+  });
+});
+</script>

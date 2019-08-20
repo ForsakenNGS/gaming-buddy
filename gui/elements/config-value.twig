@@ -1,0 +1,36 @@
+<div class="form-group row">
+    <label class="col-3 col-form-label">
+        {{ field['attr']['@_label'] }}
+    </label>
+    <div class="col-9">
+        {% if field['attr']['@_type'] == "checkbox" %}
+            <div class="form-check">
+                <label>
+                    <input data-input="{{ field['attr']['@_type'] }}" type="checkbox" name="{{ field['attr']['@_name'] }}" value="1"{% if value %} checked{% endif %} />
+                    {{ field['#text'] }}
+                </label>
+            </div>
+        {% endif %}
+        {% if field['attr']['@_type'] == "select" %}
+            <div class="form-check">
+                <select data-input="{{ field['attr']['@_type'] }}" name="{{ field['attr']['@_name'] }}" class="form-control">
+                    {% for option in field['option'] %}
+                        <option value="{{ option['attr']['@_value'] }}"{% if value == option['attr']['@_value'] %} selected{% endif %}>
+                            {{ option['#text'] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+        {% if field['attr']['@_type'] == "text" %}
+            <div class="form-check">
+                <input data-input="{{ field['attr']['@_type'] }}" type="text" name="{{ field['attr']['@_name'] }}" class="form-control" value="{{ value }}" />
+            </div>
+        {% endif %}
+        {% if field['attr']['@_type'] == "path" %}
+            <div class="form-check">
+                <input data-input="{{ field['attr']['@_type'] }}" type="text" name="{{ field['attr']['@_name'] }}" class="form-control" value="{{ value }}" />
+            </div>
+        {% endif %}
+    </div>
+</div>

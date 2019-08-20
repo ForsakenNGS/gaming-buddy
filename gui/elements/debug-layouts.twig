@@ -1,0 +1,27 @@
+<h3>Layouts</h3>
+<div class="row no-gutters app-config">
+  <div class="col flex-grow-0">
+    <ul class="nav flex-column flex-nowrap debug-layout-tabs" role="tablist">
+      {% for layout in gui.debugLayouts %}
+        <li class="nav-item">
+          <a data-toggle="tab" class="nav-link text-nowrap" href="#debug-layout{{ loop.index }}">
+            {{ layout.id|default("< No id available >") }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col">
+    <div class="tab-content">
+      {% for layout in gui.debugLayouts %}
+        <div class="tab-pane debug-layout-tab-pane" id="debug-layout{{ loop.index }}" role="tabpanel">
+          <h4>{{ layout.id }}</h4>
+          <img src="data:image/png;base64,{{ layout.image }}" alt="{{ layout.id }}" class="img-fluid">
+          <div class="p-3">
+            <pre class="text-white">{{ layout.extra|json_encode }}</pre>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

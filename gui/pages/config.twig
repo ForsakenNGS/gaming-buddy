@@ -1,0 +1,34 @@
+{% extends "../frame.twig" %}
+{% block content %}
+  <h1>Configuration</h1>
+  <div class="row no-gutters app-config">
+    <div class="col flex-grow-0">
+      <ul class="nav flex-column" role="tablist">
+        <li class="nav-item">
+          <a data-toggle="tab" class="nav-link text-nowrap active" href="#config-core">
+            General
+          </a>
+        </li>
+        {% for plugin in gui.plugins %}
+          <li class="nav-item">
+            <a data-toggle="tab" class="nav-link text-nowrap" href="#config-plugin{{ loop.index }}">
+              {{ plugin.frontend.getTitle() }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col">
+      <div class="tab-content">
+        <div class="tab-pane active" id="config-core">
+          {% include "../elements/config-form.twig" with { plugin: gui } %}
+        </div>
+        {% for plugin in gui.plugins %}
+          <div class="tab-pane" id="config-plugin{{ loop.index }}" role="tabpanel">
+            {% include "../elements/config-form.twig" with { plugin: plugin.frontend } %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

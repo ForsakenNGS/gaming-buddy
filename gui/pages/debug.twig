@@ -1,0 +1,7 @@
+{% extends "../frame.twig" %}
+{% block content %}
+  <h1>Debug information</h1>
+  {% if gui.debugLayouts is not empty %}
+    {% include "core::elements/debug-layouts.twig" %}
+  {% endif %}
+{% endblock %}

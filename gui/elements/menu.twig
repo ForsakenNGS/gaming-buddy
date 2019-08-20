@@ -1,0 +1,67 @@
+<nav class="navbar navbar-main-menu navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
+    <a href="#" class="navbar-brand">
+        <img class="navbar-brand-icon img-fluid" src="../data/logo64.png">
+        Gaming-Buddy
+        {% if gui.getConfigValue("debug") %}
+            <span class="badge badge-info ml-3 debug-step" data-template="core::elements/debug-step.twig">
+                {% include "core::elements/debug-step.twig" %}
+            </span>
+        {% endif %}
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item{% if gui.page=="core::index" %} active{% endif %}">
+            <a href="#core::index" data-action="core::index" class="nav-link">
+                <i class="fa fa-users"></i>
+                Overview
+            </a>
+        </li>
+        <li class="nav-item{% if gui.page=="core::plugin" %} active{% endif %}">
+            <a href="#core::plugin" data-action="core::plugin" class="nav-link">
+                <i class="fa fa-plug"></i>
+                Plugin
+            </a>
+        </li>
+        {% if gui.getConfigValue("debug") %}
+        <li class="nav-item{% if gui.page=="core::debug" %} active{% endif %}">
+            <a href="#core::debug" data-action="core::debug" class="nav-link">
+                <i class="fa fa-bug"></i>
+                Debug
+            </a>
+        </li>
+        {% endif %}
+        <li class="nav-item{% if gui.page=="core::config" %} active{% endif %}">
+            <a href="#core::config" data-action="core::config" class="nav-link">
+                <i class="fa fa-cog"></i>
+                Config
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#core::quit" data-action="core::quit" class="nav-link">
+                <i class="fa fa-times-circle"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+<script>
+jQuery(function() {
+
+    jQuery("[data-action=\"core::index\"]").on("click", function() {
+        gui.setPage("core::index");
+    });
+    jQuery("[data-action=\"core::plugin\"]").on("click", function() {
+        gui.setPage("core::plugin");
+    });
+    jQuery("[data-action=\"core::debug\"]").on("click", function() {
+        gui.setPage("core::debug");
+    });
+    jQuery("[data-action=\"core::config\"]").on("click", function() {
+        gui.setPage("core::config");
+    });
+    jQuery("[data-action=\"core::quit\"]").on("click", function() {
+        gui.quit();
+    });
+
+});
+</script>
