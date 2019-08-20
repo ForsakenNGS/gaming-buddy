@@ -105,12 +105,29 @@ class PluginBackend extends PluginBase {
   }
 
   /**
+   * Set single configuration value
+   * @param {string} name
+   * @param {*} value
+   */
+  setConfigValue(name, value) {
+    this.config.values[name] = value;
+    this.saveConfig();
+  }
+
+  /**
    * Set configuration values
    * @param {Object} configValues
    */
   setConfigValues(configValues) {
     this.config.values = configValues;
-    fs.writeFileSync( path.resolve(this.path, "config.json"), JSON.stringify(configValues) );
+    this.saveConfig();
+  }
+
+  /**
+   * Save the config into a file
+   */
+  saveConfig() {
+    fs.writeFileSync( path.resolve(this.path, "config.json"), JSON.stringify(this.config.values) );
   }
 
   /**
