@@ -139,8 +139,9 @@ class Gui extends EventEmitter {
   /**
    * Set the active page
    * @param page
+   * @param forceSwitch
    */
-  setPage(page) {
+  setPage(page, forceSwitch = false) {
     let pageParts = page.split("::");
     let pagePlugin = pageParts.shift();
     let pageName = pageParts.join(".");
@@ -162,6 +163,9 @@ class Gui extends EventEmitter {
       let plugin = this.getPlugin(pagePlugin);
       if (plugin !== null) {
         plugin.frontend.setPage(pageName);
+        if (forceSwitch) {
+          this.setPage("core::plugin");
+        }
       }
     }
   }

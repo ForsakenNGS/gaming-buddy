@@ -55,7 +55,7 @@ $(function() {
     // Executed every time some element is rendered
     let elementBinding = (element) => {
         $(element).find("[data-page-link]").on("click", function() {
-            gui.setPage( $(this).attr("data-page-link") );
+            gui.setPage($(this).attr("data-page-link"), true);
         });
         $(element).find("[data-action=\"core::quit\"]").on("click", function() {
             gui.quit();

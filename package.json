@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.43",
+    "@forsaken87/gaming-buddy-plugins": "file:/home/forsaken/Workspaces/NodeJS/gaming-buddy-plugins",
     "electron": "^5.0.6"
   }
 }
