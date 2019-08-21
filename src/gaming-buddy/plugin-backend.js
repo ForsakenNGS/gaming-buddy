@@ -37,7 +37,7 @@ class PluginBackend extends PluginBase {
       return;
     }
     image.getBufferAsync(Jimp.MIME_PNG).then((buffer) => {
-      this.app.sendGuiMessage("core", "debug.layouts.add", {
+      this.app.sendMessage("core", "debug.layouts.add", {
         id: layout.id,
         image: buffer.toString("base64"),
         extra: layout.extra
@@ -52,7 +52,7 @@ class PluginBackend extends PluginBase {
     if (!this.app.getConfigValue("debug")) {
       return;
     }
-    this.app.sendGuiMessage("core", "debug.status", statusText);
+    this.app.sendMessage("core", "debug.status", statusText);
   }
 
   /**
@@ -62,7 +62,7 @@ class PluginBackend extends PluginBase {
     if (!this.app.getConfigValue("debug")) {
       return;
     }
-    this.app.sendGuiMessage("core", "debug.layouts.clear");
+    this.app.sendMessage("core", "debug.layouts.clear");
   }
 
   /**
@@ -72,15 +72,29 @@ class PluginBackend extends PluginBase {
     if (!this.app.getConfigValue("debug")) {
       return;
     }
-    this.app.sendGuiMessage("core", "debug.layouts.done");
+    this.app.sendMessage("core", "debug.layouts.done");
   }
 
+  /**
+   * Handle messages received from the frontend
+   * @param {string} type
+   * @param {*} parameters
+   */
   handleMessage(type, parameters) {
-    throw new Error("Plugin "+this.name+" backend: handleMessage not implemented!");
+    switch (type) {
+      default:
+        super.handleMessage(type, parameters);
+        break;
+    }
   }
 
-  sendGuiMessage(type, ...parameters) {
-    this.app.sendGuiMessage(this.name, type, ...parameters);
+  /**
+   * Send messages to the frontend
+   * @param {string} type
+   * @param {*} parameters
+   */
+  sendMessage(type, ...parameters) {
+    this.app.sendMessage(this.name, type, ...parameters);
   }
 
   /**
@@ -134,14 +148,14 @@ class PluginBackend extends PluginBase {
    * Send the current configuration of the plugin to the GUI
    */
   sendConfigToGui() {
-    this.app.sendGuiMessage("core", "plugin.config", this.name, this.config);
+    this.app.sendMessage("core", "plugin.config", this.name, this.config);
   }
 
   /**
    * Change the plugins frontend page
    */
   setFrontendPage(page) {
-    this.app.sendGuiMessage(this.name, "page", page);
+    this.sendMessage("page", page);
   }
 
   /**

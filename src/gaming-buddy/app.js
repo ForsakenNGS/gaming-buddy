@@ -58,11 +58,17 @@ class App extends EventEmitter {
         this.setConfigValues(...parameters);
         break;
       case "ready":
-        this.sendGuiMessage("core", "config", this.config);
+        this.sendMessage("core", "config", this.config);
         this.loadPluginDirectory( path.resolve(__dirname, "..", "..", "plugins-builtin") );
         this.loadPluginDirectory( path.resolve(this.getHomeDir(), "plugins") );
-        this.sendGuiMessage("core", "ready");
+        this.sendMessage("core", "ready");
         this.updateStart();
+        break;
+      case "plugin.ready":
+        let plugin = this.getPlugin(parameters[0]);
+        if (plugin !== null) {
+          plugin.backend.emit("ready");
+        }
         break;
     }
   }
@@ -73,7 +79,7 @@ class App extends EventEmitter {
    * @param type
    * @param parameters
    */
-  sendGuiMessage(plugin, type, ...parameters) {
+  sendMessage(plugin, type, ...parameters) {
     process.send([plugin, type, ...parameters]);
   }
 
@@ -129,7 +135,7 @@ class App extends EventEmitter {
       backend: new pluginModule.backend(this, pluginPackage.name, pluginDirectory, pluginConfig)
     };
     this.plugins.push(pluginObject);
-    this.sendGuiMessage("core", "plugin.load", pluginDirectory, pluginConfig);
+    this.sendMessage("core", "plugin.load", pluginDirectory, pluginConfig);
   }
 
   /**
@@ -138,7 +144,7 @@ class App extends EventEmitter {
    */
   setPluginActive(plugin) {
     this.pluginActive = plugin;
-    this.sendGuiMessage("core", "plugin.active", (plugin !== null ? plugin.name : null));
+    this.sendMessage("core", "plugin.active", (plugin !== null ? plugin.name : null));
   }
 
   /**

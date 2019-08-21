@@ -22,7 +22,7 @@ class Gui extends EventEmitter {
       "core": path.resolve(__dirname, "..", "..", "gui")
     };
     // Start with index page
-    this.sendBackendMessage("core", "ready");
+    this.sendMessage("core", "ready");
   }
 
   debugStatusSet(debugStatus) {
@@ -91,7 +91,7 @@ class Gui extends EventEmitter {
    * @param type
    * @param parameters
    */
-  sendBackendMessage(plugin, type, ...parameters) {
+  sendMessage(plugin, type, ...parameters) {
     ipcRenderer.send("gui", plugin, type, ...parameters);
   }
 
@@ -187,12 +187,27 @@ class Gui extends EventEmitter {
   loadPlugin(pluginDirectory, pluginConfig) {
     let pluginPackage = require(path.resolve(pluginDirectory, "package.json"));
     let pluginModule = require(pluginDirectory);
-    this.plugins.push({
+    let plugin = {
       name: pluginPackage.name,
       path: pluginDirectory,
       frontend: new pluginModule.frontend(this, pluginPackage.name, pluginDirectory, pluginConfig)
-    });
+    };
+    this.plugins.push(plugin);
     this.twigNamespaces[pluginPackage.name] = path.resolve(pluginDirectory, "gui");
+    // Forward render events from plugins into the gui
+    plugin.frontend.on("element.render", (...parameters) => {
+      this.emit("element.render", ...parameters);
+    });
+    plugin.frontend.on("element.rendered", (...parameters) => {
+      this.emit("element.rendered", ...parameters);
+    });
+    plugin.frontend.on("pages.change", () => {
+      if (this.pluginActive === plugin) {
+        jQuery(".plugin-pages-nav").guiElement("render");
+      }
+    });
+    // Send ready event to backend
+    this.sendMessage("core", "plugin.ready", plugin.name);
   }
 
   /**
@@ -209,6 +224,8 @@ class Gui extends EventEmitter {
         }
       }
       this.pluginActive = plugin;
+      // Update plugin navigation
+      jQuery(".plugin-pages-nav").guiElement("render");
     }
   }
 
@@ -293,7 +310,7 @@ class Gui extends EventEmitter {
     if (configPlugin === "core") {
       // Core configuration
       this.config.values = configValues;
-      this.sendBackendMessage("core", "config", configValues);
+      this.sendMessage("core", "config", configValues);
     } else {
       // Plugin configuration
       let plugin = this.getPlugin(configPlugin);
@@ -307,7 +324,7 @@ class Gui extends EventEmitter {
    * Quit the application
    */
   quit() {
-    this.sendBackendMessage("core", "quit");
+    this.sendMessage("core", "quit");
   }
 }
 

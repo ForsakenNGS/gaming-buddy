@@ -30,14 +30,17 @@ class PluginFrontend extends PluginBase {
   }
 
   /**
-   * Handle message from the backend
-   * @param type
-   * @param parameters
+   * Handle messages received from the backend
+   * @param {string} type
+   * @param {*} parameters
    */
   handleMessage(type, parameters) {
     switch (type) {
       case "page":
         this.setPage(...parameters);
+        break;
+      default:
+        super.handleMessage(type, parameters);
         break;
     }
   }
@@ -96,8 +99,8 @@ class PluginFrontend extends PluginBase {
    * @param type
    * @param parameters
    */
-  sendBackendMessage(type, ...parameters) {
-    this.gui.sendBackendMessage(this.name, type, ...parameters);
+  sendMessage(type, ...parameters) {
+    this.gui.sendMessage(this.name, type, ...parameters);
   }
 
   /**
@@ -106,7 +109,7 @@ class PluginFrontend extends PluginBase {
    */
   setConfigValues(configValues) {
     this.config.values = configValues;
-    this.sendBackendMessage("config", configValues);
+    this.sendMessage("config", configValues);
   }
 
 }

@@ -1,0 +1,14 @@
+{% if gui.pluginActive %}
+    {% set pluginFrontend = gui.pluginActive.frontend %}
+    {% for pageNav in pluginFrontend.pages %}
+        {% set pageIdentFull = pageNav.plugin.name~"::"~pageNav.ident %}
+        <li class="nav-item{% if pluginFrontend.page==pageNav.ident %} active{% endif %}">
+            <a href="#{{ pageIdentFull }}" data-page-link="{{ pageIdentFull }}" class="nav-link">
+                {% if pageNav.icon %}
+                    <i class="{{ pageNav.icon }}"></i>
+                {% endif %}
+                {{ pageNav.title }}
+            </a>
+        </li>
+    {% endfor %}
+{% endif %}
