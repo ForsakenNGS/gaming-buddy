@@ -24,6 +24,8 @@ class App extends EventEmitter {
       list: [],
       updated: 0
     };
+    // Internal utils available to plugins
+    this.imageUtils = require('./image-utils.js');
     // Ensure local plugin dir exists
     let pluginDir = path.join(this.getHomeDir(), "plugins");
     if (!fs.existsSync(pluginDir)) {
