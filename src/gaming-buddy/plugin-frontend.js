@@ -35,7 +35,11 @@ class PluginFrontend extends PluginBase {
    * @param parameters
    */
   handleMessage(type, parameters) {
-    throw new Error("Plugin "+this.name+" frontend: handleMessage not implemented!");
+    switch (type) {
+      case "page":
+        this.setPage(...parameters);
+        break;
+    }
   }
 
   /**
@@ -76,11 +80,14 @@ class PluginFrontend extends PluginBase {
   /**
    * Set the active page
    * @param page
+   * @param forceReload
    */
-  setPage(page) {
-    this.page = page;
-    if (this.gui.page === "core::plugin") {
-      this.renderPage(page+".twig");
+  setPage(page, forceReload = false) {
+    if (forceReload || (this.page !== page)) {
+      this.page = page;
+      if (this.gui.page === "core::plugin") {
+        this.renderPage(page+".twig");
+      }
     }
   }
 

@@ -138,6 +138,13 @@ class PluginBackend extends PluginBase {
   }
 
   /**
+   * Change the plugins frontend page
+   */
+  setFrontendPage(page) {
+    this.app.sendGuiMessage(this.name, "page", page);
+  }
+
+  /**
    * Get the home dir of the application
    * @returns {string}
    */
