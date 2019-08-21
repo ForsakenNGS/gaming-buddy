@@ -111,11 +111,13 @@ class Gui extends EventEmitter {
     if (pluginFrontend !== null) {
       pluginFrontend.renderElement(pluginTemplate, variables, callback, ...parameters);
     } else {
+      this.emit("element.render", variables, callback);
       Twig.renderFile(pluginTemplate, this.getTwigContext({ plugin: pluginFrontend }, variables), (error, html) => {
         if (error) {
           console.error(error);
         } else {
           callback(html);
+          this.emit("element.rendered", variables.guiElement.__dom, templateFile, variables, html);
         }
       });
     }

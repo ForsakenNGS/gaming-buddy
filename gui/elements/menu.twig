@@ -20,12 +20,6 @@
                 Overview
             </a>
         </li>
-        <li class="nav-item{% if gui.page=="core::plugin" %} active{% endif %}">
-            <a href="#core::plugin" data-page-link="core::plugin" class="nav-link">
-                <i class="fa fa-plug"></i>
-                Plugin
-            </a>
-        </li>
         {% if gui.getConfigValue("debug") %}
         <li class="nav-item{% if gui.page=="core::debug" %} active{% endif %}">
             <a href="#core::debug" data-page-link="core::debug" class="nav-link">
@@ -65,7 +59,7 @@ $(function() {
     // Apply to elements rendered async
     gui.on("element.rendered", elementBinding);
     // Initial call
-    elementBinding($(".navbar"));
+    elementBinding($(".page"));
 
 });
 </script>
