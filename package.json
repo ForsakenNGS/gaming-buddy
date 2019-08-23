@@ -1,11 +1,16 @@
 {
   "name": "@forsaken87/gaming-buddy",
+  "productName": "gaming-buddy",
+  "description": "Framework for writing advanced gaming tools/addons",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make:all": "yarn make:linux && yarn make:win32",
+    "make:win32": "electron-forge make --platform=win32",
+    "make:linux": "electron-forge make --platform=linux",
     "publish": "electron-forge publish"
   },
   "author": "Jens N",
@@ -24,8 +29,81 @@
     "twig": "^1.13.3"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.43",
-    "@forsaken87/gaming-buddy-plugins": "file:/home/forsaken/Workspaces/NodeJS/gaming-buddy-plugins",
-    "electron": "^5.0.6"
+    "@electron-forge/cli": "^6.0.0-beta.44",
+    "@electron-forge/maker-deb": "^6.0.0-beta.44",
+    "@electron-forge/maker-flatpak": "^6.0.0-beta.44",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.44",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.44",
+    "@electron-forge/maker-zip": "^6.0.0-beta.44",
+    "@electron-forge/publisher-github": "^6.0.0-beta.44",
+    "@forsaken87/gaming-buddy-plugins": "file:../gaming-buddy-plugins",
+    "electron": "^6.0.3"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip",
+          "dmg"
+        ],
+        "linux": [
+          "deb",
+          "rpm",
+          "flatpak",
+          "snap",
+          "squirrel"
+        ]
+      },
+      "packagerConfig": {
+        "asar": {
+          "unpack": "**/node_modules/@forsaken87/screenshot-capture/lib/win32/*"
+        },
+        "icon": "data/icon.png",
+        "ignore": [
+          "^/cache",
+          "^/debug"
+        ]
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "defaultPlatforms": [
+            "linux",
+            "win32"
+          ],
+          "config": {
+            "name": "gaming-buddy",
+            "iconUrl": "https://github.com/ForsakenNGS/gaming-buddy/raw/master/data/icon.ico",
+            "setupIcon": "./data/icon.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-flatpak",
+          "config": {
+            "bin": "gaming-buddy",
+            "id": "com.forsaken87.gamingbuddy"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "bin": "gaming-buddy"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "bin": "gaming-buddy"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "config": {}
+        }
+      ]
+    }
   }
 }

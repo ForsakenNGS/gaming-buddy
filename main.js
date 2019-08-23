@@ -27,10 +27,9 @@ function createWindow () {
     });
     win.setMenuBarVisibility(false);
     win.loadFile('gui/index.html');
-    win.webContents.openDevTools();
 
     // Start backend
-    let backend = fork( path.resolve("src", "backend.js") );
+    let backend = fork( path.join(__dirname, "src", "backend.js") );
     let backendCallback = function(message) {
         win.webContents.send("gui", ...message);
     };
