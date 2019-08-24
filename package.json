@@ -61,7 +61,7 @@
         "asar": {
           "unpack": "**/node_modules/@forsaken87/screenshot-capture/lib/win32/*"
         },
-        "icon": "data/icon.png",
+        "icon": "data/logo256.png",
         "ignore": [
           "^/cache",
           "^/debug"
@@ -76,8 +76,8 @@
           ],
           "config": {
             "name": "gaming-buddy",
-            "iconUrl": "https://github.com/ForsakenNGS/gaming-buddy/raw/master/data/icon.ico",
-            "setupIcon": "./data/icon.ico"
+            "iconUrl": "https://github.com/ForsakenNGS/gaming-buddy/raw/master/data/logo.ico",
+            "setupIcon": "./data/logo.ico"
           }
         },
         {
