@@ -14,10 +14,10 @@
     {% endif %}
     </span>
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item{% if gui.page=="core::index" %} active{% endif %}">
-            <a href="#core::index" data-action="core::index" class="nav-link">
-                <i class="fa fa-users"></i>
-                Overview
+        <li class="nav-item{% if gui.page=="core::plugins" %} active{% endif %}">
+            <a href="#core::plugins" data-page-link="core::plugins" class="nav-link">
+                <i class="fa fa-plug"></i>
+                Plugins
             </a>
         </li>
         {% if gui.getConfigValue("debug") %}

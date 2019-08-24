@@ -1,0 +1,75 @@
+{% extends "../frame.twig" %}
+{% block content %}
+  <h1>Plugins</h1>
+
+  <h3>Installed</h3>
+  <table class="table table-sm table-bordered table-striped table-dark">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Name / Version</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for plugin in gui.pluginList if plugin.installed %}
+      <tr>
+        <td>
+          <button class="btn btn-danger" data-action="plugin-uninstall" data-plugin="{{ plugin.name }}">
+            Uninstall
+          </button>
+        </td>
+        <td>
+          {{ plugin.name }}<br />
+          <span class="text-muted">{{ plugin.version }}</span>
+        </td>
+        <td>
+          {{ plugin.description }}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Available</h3>
+  <table class="table table-sm table-bordered table-striped table-dark">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Name / Version</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for plugin in gui.pluginList if not plugin.installed %}
+      <tr>
+        <td>
+          <button class="btn btn-success" data-action="plugin-install" data-plugin="{{ plugin.name }}">
+            Install
+          </button>
+        </td>
+        <td>
+          {{ plugin.name }}<br />
+          <span class="text-muted">{{ plugin.version }}</span>
+        </td>
+        <td>
+          {{ plugin.description }}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <script type="text/javascript">
+  $(function() {
+      $("[data-action=\"plugin-install\"]").on("click", function(e) {
+          e.preventDefault();
+          gui.sendMessage("core", "plugin.install", $(this).attr("data-plugin"));
+      });
+      $("[data-action=\"plugin-uninstall\"]").on("click", function(e) {
+          e.preventDefault();
+          gui.sendMessage("core", "plugin.uninstall", $(this).attr("data-plugin"));
+      });
+  });
+  </script>
+{% endblock %}
