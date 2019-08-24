@@ -18,10 +18,18 @@
           <button class="btn btn-danger" data-action="plugin-uninstall" data-plugin="{{ plugin.name }}">
             Uninstall
           </button>
+          {% if plugin.updateAvailable %}
+          <button class="btn btn-success" data-action="plugin-update" data-plugin="{{ plugin.name }}">
+            Update
+          </button>
+          {% endif %}
         </td>
         <td>
           {{ plugin.name }}<br />
-          <span class="text-muted">{{ plugin.version }}</span>
+          <span class="text-muted">
+            {{ plugin.version }}
+            {% if plugin.updateAvailable %}({{ plugin.installedVersion }} installed){% endif %}
+          </span>
         </td>
         <td>
           {{ plugin.description }}
@@ -65,6 +73,10 @@
       $("[data-action=\"plugin-install\"]").on("click", function(e) {
           e.preventDefault();
           gui.sendMessage("core", "plugin.install", $(this).attr("data-plugin"));
+      });
+      $("[data-action=\"plugin-update\"]").on("click", function(e) {
+          e.preventDefault();
+          gui.sendMessage("core", "plugin.update", $(this).attr("data-plugin"));
       });
       $("[data-action=\"plugin-uninstall\"]").on("click", function(e) {
           e.preventDefault();

@@ -3,6 +3,7 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const npm = require('npm');
+const semver = require('semver');
 const libnpmsearch = require('libnpmsearch');
 const pacote = require('pacote');
 const rimraf = require('rimraf');
@@ -79,6 +80,14 @@ class App extends EventEmitter {
                 break;
             case "plugin.install":
                 this.installPlugin(...parameters).then((pluginObject) => {
+                    // Update plugin list after installing
+                    return this.listPlugins();
+                }).then((pluginList) => {
+                    this.sendMessage("core", "plugin.list", pluginList);
+                });
+                break;
+            case "plugin.update":
+                this.updatePlugin(...parameters).then((pluginObject) => {
                     // Update plugin list after installing
                     return this.listPlugins();
                 }).then((pluginList) => {
@@ -180,6 +189,7 @@ class App extends EventEmitter {
                 let pluginConfig = new Config(pluginPackage.name, pluginDirectory);
                 let pluginObject = {
                     name: pluginPackage.name,
+                    version: pluginPackage.version,
                     path: pluginDirectory,
                     backend: new pluginModule.backend(this, pluginPackage.name, pluginDirectory, pluginConfig)
                 };
@@ -192,6 +202,11 @@ class App extends EventEmitter {
         });
     }
 
+    /**
+     * Unloads a plugin
+     * @param pluginObject
+     * @returns {Promise<unknown>}
+     */
     unloadPlugin(pluginObject) {
         return new Promise((resolve, reject) => {
             let pluginIndex = this.plugins.indexOf(pluginObject);
@@ -201,6 +216,9 @@ class App extends EventEmitter {
             }
             this.plugins.splice(pluginIndex, 1);
             this.sendMessage("core", "plugin.unload", pluginObject.name);
+            // Clear require cache
+            delete require.cache[require.resolve( pluginObject.path )];
+            delete require.cache[require.resolve( path.join(pluginObject.path, "package.json") )];
             resolve(pluginObject);
         });
     }
@@ -214,7 +232,15 @@ class App extends EventEmitter {
             let pluginList = [];
             for (let i = 0; i < results.length; i++) {
                 if (results[i].hasOwnProperty("keywords") && (results[i].keywords.indexOf("gaming-buddy-plugin") >= 0)) {
-                    results[i].installed = (this.getPlugin(results[i].name) !== null);
+                    results[i].installed = false;
+                    results[i].installedVersion = null;
+                    results[i].updateAvailable = false;
+                    let pluginInstalled = this.getPlugin(results[i].name);
+                    if (pluginInstalled !== null) {
+                        results[i].installed = true;
+                        results[i].installedVersion = pluginInstalled.version;
+                        results[i].updateAvailable = semver.gt(results[i].version, pluginInstalled.version);
+                    }
                     pluginList.push(results[i]);
                 }
             }
@@ -265,6 +291,22 @@ class App extends EventEmitter {
         }).then(() => {
             // Load plugin
             return this.loadPlugin(targetDir);
+        });
+    }
+
+    /**
+     * Update plugin to the latest version
+     * @param pluginName
+     * @param source
+     * @returns {Promise<unknown>}
+     */
+    updatePlugin(pluginName, source = null) {
+        let pluginObject = this.getPlugin(pluginName);
+        return this.unloadPlugin(pluginObject).then((pluginObject) => {
+            if (source === null) {
+                source = pluginObject.name;
+            }
+            return this.installPlugin(source);
         });
     }
 

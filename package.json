@@ -29,6 +29,7 @@
     "pacote": "^9.5.8",
     "popper.js": "^1.15.0",
     "rimraf": "^3.0.0",
+    "semver": "^6.3.0",
     "tesseract.js": "^2.0.0-alpha.11",
     "twig": "^1.13.3"
   },
