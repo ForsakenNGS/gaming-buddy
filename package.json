@@ -108,6 +108,22 @@
           "name": "@electron-forge/maker-zip",
           "config": {}
         }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "platforms": [
+            "linux",
+            "win32"
+          ],
+          "config": {
+            "repository": {
+              "owner": "ForsakenNGS",
+              "name": "gaming-buddy"
+            },
+            "prerelease": true
+          }
+        }
       ]
     }
   }
