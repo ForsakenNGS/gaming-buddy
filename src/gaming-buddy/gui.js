@@ -200,7 +200,7 @@ class Gui extends EventEmitter {
      */
     getPlugin(pluginName) {
         for (let i = 0; i < this.plugins.length; i++) {
-            if (this.plugins[i].name === pluginName) {
+            if ((this.plugins[i].name === pluginName) || (this.plugins[i].name.replace("/", "-") === pluginName)) {
                 return this.plugins[i];
             }
         }
