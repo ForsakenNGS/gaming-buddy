@@ -8,7 +8,5 @@
             <option value="en">English</option>
             <option value="de">German</option>
         </value>
-        <value type="action" name="installTest" label="Install test">Test plugin installation</value>
-        <value type="action" name="openPluginDir" label="Plugin directory">Open plugin directory</value>
     </section>
 </config>
