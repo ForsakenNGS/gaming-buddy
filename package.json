@@ -2,7 +2,7 @@
   "name": "@forsaken87/gaming-buddy",
   "productName": "gaming-buddy",
   "description": "Framework for writing advanced gaming tools/addons",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
