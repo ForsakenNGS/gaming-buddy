@@ -221,7 +221,7 @@ class Gui extends EventEmitter {
             frontend: new pluginModule.frontend(this, pluginPackage.name, pluginDirectory, pluginConfig)
         };
         this.plugins.push(plugin);
-        this.twigNamespaces[pluginPackage.name] = path.resolve(pluginDirectory, "gui");
+        this.twigNamespaces[pluginPackage.name.replace("/", "-")] = path.resolve(pluginDirectory, "gui");
         // Forward render events from plugins into the gui
         plugin.frontend.on("element.render", (...parameters) => {
             this.emit("element.render", ...parameters);
@@ -255,7 +255,7 @@ class Gui extends EventEmitter {
         }
         this.plugins.splice(pluginIndex, 1);
         pluginObject.frontend.clearAllHooks();
-        delete this.twigNamespaces[pluginObject.name];
+        delete this.twigNamespaces[pluginObject.name.replace("/", "-")];
     }
 
     /**
