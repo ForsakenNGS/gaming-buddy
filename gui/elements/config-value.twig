@@ -12,25 +12,21 @@
             </div>
         {% endif %}
         {% if field['attr']['@_type'] == "select" %}
-            <div class="form-check">
-                <select data-input="{{ field['attr']['@_type'] }}" name="{{ field['attr']['@_name'] }}" class="form-control">
-                    {% for option in field['option'] %}
-                        <option value="{{ option['attr']['@_value'] }}"{% if value == option['attr']['@_value'] %} selected{% endif %}>
-                            {{ option['#text'] }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+            <select data-input="{{ field['attr']['@_type'] }}" name="{{ field['attr']['@_name'] }}" class="form-control">
+                {% for option in field['option'] %}
+                    <option value="{{ option['attr']['@_value'] }}"{% if value == option['attr']['@_value'] %} selected{% endif %}>
+                        {{ option['#text'] }}
+                    </option>
+                {% endfor %}
+            </select>
         {% endif %}
-        {% if field['attr']['@_type'] == "text" %}
-            <div class="form-check">
-                <input data-input="{{ field['attr']['@_type'] }}" type="text" name="{{ field['attr']['@_name'] }}" class="form-control" value="{{ value }}" />
-            </div>
+        {% if field['attr']['@_type'] == "text" or field['attr']['@_type'] == "path" or field['attr']['@_type'] == "file" %}
+            <input data-input="{{ field['attr']['@_type'] }}" type="text" name="{{ field['attr']['@_name'] }}" class="form-control" value="{{ value }}" />
         {% endif %}
-        {% if field['attr']['@_type'] == "path" %}
-            <div class="form-check">
-                <input data-input="{{ field['attr']['@_type'] }}" type="text" name="{{ field['attr']['@_name'] }}" class="form-control" value="{{ value }}" />
-            </div>
+        {% if field['attr']['@_type'] == "action" %}
+            <button data-input="{{ field['attr']['@_type'] }}" data-name="{{ field['attr']['@_name'] }}" class="btn btn-secondary" data-value="{{ value }}">
+              {{ field['#text'] }}
+            </button>
         {% endif %}
     </div>
 </div>

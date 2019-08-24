@@ -26,46 +26,73 @@
 </form>
 <script type="text/javascript">
 jQuery(function() {
-  let form = jQuery("[data-plugin=\"{{ plugin.config.pluginName }}\"]");
-  // Toggle sections
-  let updateSections = function() {
-    let section = jQuery(this).closest(".config-group");
-    section.find("fieldset").prop("disabled", !jQuery(this).is(":checked"));
-  };
-  jQuery("[data-section-toggle] [data-input]").on("click", updateSections).each(updateSections);
-  // Save function
-  let formSave = function() {
+    let form = jQuery("[data-plugin=\"{{ plugin.config.pluginName }}\"]");
     let configPlugin = "{{ plugin.config.pluginName }}";
-    let configValues = {};
-    form.find("[data-input]").each(function() {
-      let inputName = jQuery(this).attr("name");
-      let inputType = jQuery(this).attr("data-input");
-      switch (inputType) {
-        default:
-          configValues[inputName] = jQuery(this).val();
-          break;
-        case "checkbox":
-          configValues[inputName] = jQuery(this).is(":checked");
-          break;
-      }
-    });
-    gui.setConfigValues(configPlugin, configValues);
-  };
-  // Input change event
-  form.find("[data-input]").each(function() {
-    let inputType = jQuery(this).attr("data-input");
-    let inputChanged = function() {
-      formSave();
+    // Toggle sections
+    let updateSections = function () {
+        let section = jQuery(this).closest(".config-group");
+        section.find("fieldset").prop("disabled", !jQuery(this).is(":checked"));
     };
-    switch (inputType) {
-      default:
-        jQuery(this).on("change", inputChanged);
-        break;
-      case "text":
-      case "path":
-        jQuery(this).on("change keyup", inputChanged);
-        break;
-    }
-  });
+    jQuery("[data-section-toggle] [data-input]").on("click", updateSections).each(updateSections);
+    // Save function
+    let formSave = function () {
+        let configValues = {};
+        form.find("[data-input][name]").each(function () {
+            let inputName = jQuery(this).attr("name");
+            let inputType = jQuery(this).attr("data-input");
+            switch (inputType) {
+                default:
+                    configValues[inputName] = jQuery(this).val();
+                    break;
+                case "checkbox":
+                    configValues[inputName] = jQuery(this).is(":checked");
+                    break;
+            }
+        });
+        gui.setConfigValues(configPlugin, configValues);
+    };
+    // Input change event
+    form.find("[data-input]").each(function () {
+        let inputType = jQuery(this).attr("data-input");
+        let inputChanged = function () {
+            formSave();
+        };
+        switch (inputType) {
+            default:
+                jQuery(this).on("change", inputChanged);
+                break;
+            case "text":
+                jQuery(this).on("change keyup", inputChanged);
+                break;
+            case "file":
+                jQuery(this).on("change keyup", inputChanged);
+                jQuery(this).on("click", function (e) {
+                    gui.selectFile().then((result) => {
+                        if (!result.canceled && (result.filePaths.length > 0)) {
+                            jQuery(this).val( result.filePaths[0] );
+                        }
+                    });
+                });
+                break;
+            case "path":
+                jQuery(this).on("change keyup", inputChanged);
+                jQuery(this).on("click", function (e) {
+                    gui.selectPath().then((result) => {
+                        if (!result.canceled && (result.filePaths.length > 0)) {
+                            jQuery(this).val( result.filePaths[0] );
+                        }
+                    });
+                });
+                break;
+            case "action":
+                jQuery(this).on("click", function (e) {
+                    e.preventDefault();
+                    gui.handleMessage(configPlugin, "config.action", [
+                        jQuery(this).attr("data-name"), jQuery(this).attr("data-value")
+                    ]);
+                })
+                break;
+        }
+    });
 });
 </script>

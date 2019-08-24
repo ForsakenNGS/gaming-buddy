@@ -8,7 +8,6 @@
             <option value="en">English</option>
             <option value="de">German</option>
         </value>
-        <value type="text" name="text" label="Text" default="Test Value"></value>
-        <value type="path" name="path" label="Path" default="/home/forsaken"></value>
+        <value type="action" name="openPluginDir" label="Plugin directory">Open plugin directory</value>
     </section>
 </config>

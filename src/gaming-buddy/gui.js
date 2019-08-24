@@ -1,5 +1,6 @@
 // Nodejs dependencies
-const {ipcRenderer} = require('electron');
+const {ipcRenderer, remote} = require('electron');
+const os = require('os');
 const path = require('path');
 const Twig = require('twig');
 const EventEmitter = require('events');
@@ -55,6 +56,14 @@ class Gui extends EventEmitter {
     switch (type) {
       case "config":
         this.config = parameters[0];
+        break;
+      case "config.action":
+        switch (parameters[0]) {
+          case "openPluginDir":
+            debugger;
+            remote.shell.openItem( path.resolve(this.getHomeDir(), "plugins") );
+            break;
+        }
         break;
       case "debug.status":
         this.debugStatusSet(parameters[0]);
@@ -236,6 +245,18 @@ class Gui extends EventEmitter {
   }
 
   /**
+   * Get home directory
+   * @returns {string}
+   */
+  getHomeDir() {
+    if (os.platform() === "linux") {
+      return path.join(os.homedir(), "/.config/gaming-buddy");
+    } else {
+      return path.join(os.homedir(), "/AppData/Roaming/gaming-buddy");
+    }
+  }
+
+  /**
    * Get configuration value
    * @param {string} name
    * @returns {null|*}
@@ -324,6 +345,23 @@ class Gui extends EventEmitter {
         plugin.frontend.setConfigValues(configValues);
       }
     }
+  }
+
+  /**
+   * Select a directory
+   * @returns {Promise<Electron.OpenDialogReturnValue>}
+   */
+  selectFile(options = {}, ...parameters) {
+    return remote.dialog.showOpenDialog(options, ...parameters);
+  }
+
+  /**
+   * Select a directory
+   * @returns {Promise<Electron.OpenDialogReturnValue>}
+   */
+  selectPath(options = {}, ...parameters) {
+    options = Object.assign({ properties: ['openDirectory'] }, options);
+    return remote.dialog.showOpenDialog(options, ...parameters);
   }
 
   /**

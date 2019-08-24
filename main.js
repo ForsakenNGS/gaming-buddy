@@ -20,7 +20,7 @@ function createWindow () {
         minWidth: 1000,
         minHeight: 600,
         frame: false,
-        icon: path.join(__dirname, 'data/icon64.png'),
+        icon: path.join(__dirname, 'data/logo64.png'),
         webPreferences: {
             nodeIntegration: true
         }
