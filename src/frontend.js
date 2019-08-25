@@ -7,6 +7,8 @@ const GamingBuddyGui = require( path.resolve(__dirname, "..", "src", "gaming-bud
 let gui = new GamingBuddyGui();
 
 ipcRenderer.on("gui", (event, plugin, type, ...parameters) => {
-    console.log(event, plugin, type, ...parameters);
+    if (type.indexOf("debug") !== 0) {
+        console.log(event, plugin, type, ...parameters);
+    }
     gui.handleMessage(plugin, type, parameters);
 });
