@@ -443,7 +443,8 @@ class App extends EventEmitter {
     update() {
         this.updateWindows().then(() => {
             // Update plugin
-            if ((this.pluginActive !== null) && this.pluginActive.backend.checkActive(this.windowActive)) {
+            if ((this.pluginActive !== null) && (this.windowActive !== null) &&
+                    this.pluginActive.backend.checkActive(this.windowActive)) {
                 let pluginTarget = this.pluginActive;
                 // Stop update timer
                 this.updateStop();
