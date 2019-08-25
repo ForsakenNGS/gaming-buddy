@@ -6,13 +6,6 @@
     <ul class="navbar-nav plugin-pages-nav" data-template="core::elements/plugin-pages.twig">
         {% include "core::elements/plugin-pages.twig" %}
     </ul>
-    <span class="navbar-text">
-    {% if gui.getConfigValue("debug") %}
-        <span class="badge badge-info ml-3 debug-step" data-template="core::elements/debug-step.twig">
-            {% include "core::elements/debug-step.twig" %}
-        </span>
-    {% endif %}
-    </span>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item{% if gui.page=="core::plugins" %} active{% endif %}">
             <a href="#core::plugins" data-page-link="core::plugins" class="nav-link">

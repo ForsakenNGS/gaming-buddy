@@ -18,6 +18,19 @@
     bottom: 0;
 }
 
+.content.debug-enabled {
+    bottom: 32px;
+}
+
+.debug-bar {
+    position: absolute;
+    overflow: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32px;
+}
+
 .app-config .nav {
     margin: 1em -1px 1em 0;
 }

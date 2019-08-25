@@ -1,0 +1,7 @@
+{% if gui.getConfigValue("debug") %}
+    <div class="debug-bar bg-info text-light p-1">
+        <span class="debug-step" data-template="core::elements/debug-step.twig">
+            {% include "core::elements/debug-step.twig" %}
+        </span>
+    </div>
+{% endif %}
