@@ -12,7 +12,7 @@ const EventEmitter = require('events');
 const ScreenshotCapture = require('@forsaken87/screenshot-capture');
 
 // Local classes
-const Config = require('./config.js');
+const { Config } = require('@forsaken87/gaming-buddy-plugins');
 
 class App extends EventEmitter {
 
