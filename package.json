@@ -2,7 +2,7 @@
   "name": "@forsaken87/gaming-buddy",
   "productName": "gaming-buddy",
   "description": "Framework for writing advanced gaming tools/addons",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -30,19 +30,19 @@
     "popper.js": "^1.15.0",
     "rimraf": "^3.0.0",
     "semver": "^6.3.0",
-    "tesseract.js": "^2.0.0-alpha.11",
+    "tesseract.js": "^2.1.1",
     "twig": "^1.13.3"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.44",
-    "@electron-forge/maker-deb": "^6.0.0-beta.44",
-    "@electron-forge/maker-flatpak": "^6.0.0-beta.44",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.44",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.44",
-    "@electron-forge/maker-zip": "^6.0.0-beta.44",
-    "@electron-forge/publisher-github": "^6.0.0-beta.44",
-    "@forsaken87/gaming-buddy-plugins": "^1.0.5",
-    "electron": "^6.0.4"
+    "@electron-forge/cli": "^6.0.0-beta.51",
+    "@electron-forge/maker-deb": "^6.0.0-beta.51",
+    "@electron-forge/maker-flatpak": "^6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.51",
+    "@electron-forge/maker-zip": "^6.0.0-beta.51",
+    "@electron-forge/publisher-github": "^6.0.0-beta.51",
+    "@forsaken87/gaming-buddy-plugins": "^1.0.6",
+    "electron": "^6.1.12"
   },
   "config": {
     "forge": {

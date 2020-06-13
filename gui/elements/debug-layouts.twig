@@ -1,6 +1,6 @@
 <h3>Layouts</h3>
-<div class="row no-gutters app-config">
-  <div class="col flex-grow-0">
+<div class="d-flex flex-row no-gutters app-config">
+  <div class="flex-grow-0">
     <ul class="nav flex-column flex-nowrap debug-layout-tabs" role="tablist">
       {% for layout in gui.debugLayouts %}
         <li class="nav-item">
@@ -11,7 +11,7 @@
       {% endfor %}
     </ul>
   </div>
-  <div class="col">
+  <div class="flex-grow-1">
     <div class="tab-content">
       {% for layout in gui.debugLayouts %}
         <div class="tab-pane debug-layout-tab-pane" id="debug-layout{{ loop.index }}" role="tabpanel">

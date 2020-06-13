@@ -1,5 +1,5 @@
 <form data-plugin="{{ plugin.config.pluginName }}">
-{% for configSection in plugin.config.structure.config.section %}
+{% for configSection in plugin.config.structure.config[0].section %}
   <div class="config-group">
   {% if configSection['attr']['@_checkbox'] %}
     <div class="form-check" data-section-toggle="{{ configSection['attr']['@_name'] }}">
