@@ -1,0 +1,10 @@
+{% include "core::webapp/menu.twig" %}
+<div class="content p-3{% if gui.getConfigValue("debug") %} debug-enabled{% endif %}">
+{% block content %}
+    <div class="text-center">
+        <h1>Page not found</h1>
+        <p>Oops! Something went wrong.</p>
+    </div>
+{% endblock %}
+</div>
+{% include "core::elements/debug-bar.twig" %}

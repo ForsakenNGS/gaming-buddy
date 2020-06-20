@@ -1,0 +1,28 @@
+<nav class="navbar navbar-main-menu navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
+    <a href="#" class="navbar-brand">
+        <img class="navbar-brand-icon img-fluid" src="../data/logo64.png">
+        Gaming-Buddy
+    </a>
+    <ul class="navbar-nav plugin-pages-nav" data-template="core::elements/plugin-pages.twig">
+        {% include "core::elements/plugin-pages.twig" %}
+    </ul>
+</nav>
+
+
+<script>
+$(function() {
+
+    // Executed every time some element is rendered
+    let elementBinding = (element) => {
+        $(element).find("[data-page-link]").on("click", function() {
+            gui.setPage($(this).attr("data-page-link"), true);
+        });
+    };
+
+    // Apply to elements rendered async
+    gui.on("element.rendered", elementBinding);
+    // Initial call
+    elementBinding($(".page"));
+
+});
+</script>

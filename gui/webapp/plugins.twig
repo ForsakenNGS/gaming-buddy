@@ -1,0 +1,30 @@
+{% extends "frame.twig" %}
+{% block content %}
+  <h1>Plugins</h1>
+
+  <h3>Installed</h3>
+  <table class="table table-sm table-bordered table-striped table-dark">
+    <thead>
+      <tr>
+        <th>Name / Version</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for plugin in gui.pluginList if plugin.installed %}
+      <tr>
+        <td>
+          {{ plugin.name }}<br />
+          <span class="text-muted">
+            {{ plugin.version }}
+            {% if plugin.updateAvailable %}({{ plugin.installedVersion }} installed){% endif %}
+          </span>
+        </td>
+        <td>
+          {{ plugin.description }}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

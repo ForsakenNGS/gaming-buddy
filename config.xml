@@ -4,6 +4,9 @@
         <value type="checkbox" name="debug" label="Debug" default="false">
             Enable debug output
         </value>
+        <value type="checkbox" name="webapp" label="App" default="true">
+            Enable progressive app
+        </value>
         <value type="select" name="language" label="Language" default="en">
             <option value="en">English</option>
             <option value="de">German</option>

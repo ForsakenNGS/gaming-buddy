@@ -10,6 +10,7 @@ const rimraf = require('rimraf');
 const Jimp = require('jimp');
 const EventEmitter = require('events');
 const ScreenshotCapture = require('@forsaken87/screenshot-capture');
+const fork = require('child_process').fork;
 
 // Local classes
 const { Config } = require('@forsaken87/gaming-buddy-plugins');
@@ -18,7 +19,6 @@ class App extends EventEmitter {
 
     constructor() {
         super();
-        this.debugEnabled = true;
         this.config = new Config("core", path.resolve(__dirname, "..", ".."));
         this.pluginActive = null;
         this.plugins = [];
@@ -29,10 +29,20 @@ class App extends EventEmitter {
             list: [],
             updated: 0
         };
+        this.webapp = null;
         // Ensure local plugin dir exists
         let pluginDir = path.join(this.getHomeDir(), "plugins");
         if (!fs.existsSync(pluginDir)) {
             fs.mkdirSync(pluginDir, {recursive: true});
+        }
+        // Start websever for progressive app if enabled
+        if (this.getConfigValue("webapp")) {
+            let self = this;
+            let webserverMessageCallback = function(message) {
+                self.handleWebappMessage(...message);
+            };
+            this.webapp = fork( path.resolve(__dirname, "..", "webapp.js") );
+            this.webapp.on("message", webserverMessageCallback);
         }
     }
 
@@ -69,6 +79,8 @@ class App extends EventEmitter {
                 }).then((pluginList) => {
                     this.sendMessage("core", "plugin.list", pluginList);
                     this.sendMessage("core", "ready");
+                    this.sendWebappMessage("core", "plugin.list", pluginList);
+                    this.sendWebappMessage("core", "ready");
                     this.updateStart();
                 });
                 break;
@@ -106,6 +118,29 @@ class App extends EventEmitter {
     }
 
     /**
+     * Handle message from the frontend
+     * @param pluginName
+     * @param type
+     * @param parameters
+     * @returns {undefined|void}
+     */
+    handleWebappMessage(pluginName, type, ...parameters) {
+        if (pluginName !== "core") {
+            // Handle plugin message
+            let plugin = this.getPlugin(pluginName);
+            if (plugin !== null) {
+                switch (type) {
+                    case "config":
+                        return plugin.backend.setConfigValues(...parameters);
+                    default:
+                        return plugin.backend.handleWebappMessage(type, parameters);
+                }
+            }
+            return;
+        }
+    }
+
+    /**
      * Send message to the frontend
      * @param plugin
      * @param type
@@ -113,6 +148,18 @@ class App extends EventEmitter {
      */
     sendMessage(plugin, type, ...parameters) {
         process.send([plugin, type, ...parameters]);
+    }
+
+    /**
+     * Send message to the frontend
+     * @param plugin
+     * @param type
+     * @param parameters
+     */
+    sendWebappMessage(plugin, type, ...parameters) {
+        if (this.webapp !== null) {
+            this.webapp.send([plugin, type, ...parameters]);
+        }
     }
 
     /**
@@ -195,6 +242,7 @@ class App extends EventEmitter {
                 };
                 this.plugins.push(pluginObject);
                 this.sendMessage("core", "plugin.load", pluginDirectory, pluginConfig);
+                this.sendWebappMessage("core", "plugin.load", pluginDirectory, pluginConfig);
                 resolve(pluginObject);
             } catch (error) {
                 reject(error);
@@ -216,6 +264,7 @@ class App extends EventEmitter {
             }
             this.plugins.splice(pluginIndex, 1);
             this.sendMessage("core", "plugin.unload", pluginObject.name);
+            this.sendWebappMessage("core", "plugin.unload", pluginObject.name);
             // Clear require cache
             delete require.cache[require.resolve( pluginObject.path )];
             delete require.cache[require.resolve( path.join(pluginObject.path, "package.json") )];
@@ -255,6 +304,7 @@ class App extends EventEmitter {
     setPluginActive(plugin) {
         this.pluginActive = plugin;
         this.sendMessage("core", "plugin.active", (plugin !== null ? plugin.name : null));
+        this.sendWebappMessage("core", "plugin.active", (plugin !== null ? plugin.name : null));
     }
 
     /**
