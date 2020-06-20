@@ -10,6 +10,7 @@ const rimraf = require('rimraf');
 const Jimp = require('jimp');
 const EventEmitter = require('events');
 const ScreenshotCapture = require('@forsaken87/screenshot-capture');
+const fork = require('child_process').fork;
 
 // Local classes
 const { Config } = require('@forsaken87/gaming-buddy-plugins');
@@ -18,7 +19,6 @@ class App extends EventEmitter {
 
     constructor() {
         super();
-        this.debugEnabled = true;
         this.config = new Config("core", path.resolve(__dirname, "..", ".."));
         this.pluginActive = null;
         this.plugins = [];
@@ -29,10 +29,20 @@ class App extends EventEmitter {
             list: [],
             updated: 0
         };
+        this.webserver = null;
         // Ensure local plugin dir exists
         let pluginDir = path.join(this.getHomeDir(), "plugins");
         if (!fs.existsSync(pluginDir)) {
             fs.mkdirSync(pluginDir, {recursive: true});
+        }
+        // Start websever for progressive app if enabled
+        if (this.getConfigValue("webapp")) {
+            let self = this;
+            let webserverMessageCallback = function(messageType, message) {
+                self.handleMessage(...message);
+            };
+            this.webserver = fork( path.resolve(__dirname, "web.js") );
+            this.webserver.on("message", webserverMessageCallback);
         }
     }
 
@@ -72,6 +82,8 @@ class App extends EventEmitter {
                     this.updateStart();
                 });
                 break;
+            case "page.set":
+
             case "plugin.ready":
                 let plugin = this.getPlugin(parameters[0]);
                 if (plugin !== null) {
@@ -102,6 +114,12 @@ class App extends EventEmitter {
                     this.sendMessage("core", "plugin.list", pluginList);
                 });
                 break;
+            case "element.rendered":
+            case "page.rendered":
+                if (this.webserver !== null) {
+                    this.webserver.send([pluginName, type, ...parameters]);
+                }
+                break;
         }
     }
 
@@ -113,6 +131,9 @@ class App extends EventEmitter {
      */
     sendMessage(plugin, type, ...parameters) {
         process.send([plugin, type, ...parameters]);
+        if (this.webserver !== null) {
+            this.webserver.send([plugin, type, ...parameters]);
+        }
     }
 
     /**

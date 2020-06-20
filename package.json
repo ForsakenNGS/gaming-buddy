@@ -16,6 +16,7 @@
   "author": "Jens N",
   "license": "GPL-3.0",
   "dependencies": {
+    "@forsaken87/gaming-buddy-plugins": "file:../gaming-buddy-plugins",
     "@forsaken87/screenshot-capture": "^1.0.1",
     "@fortawesome/fontawesome-free": "^5.10.2",
     "bootstrap": "^4.3.1",
@@ -25,13 +26,15 @@
     "jimp": "^0.6.4",
     "jquery": "^3.4.1",
     "libnpmsearch": "^2.0.2",
+    "node-static": "^0.7.11",
     "npm": "^6.11.2",
     "pacote": "^9.5.8",
     "popper.js": "^1.15.0",
     "rimraf": "^3.0.0",
     "semver": "^6.3.0",
     "tesseract.js": "^2.1.1",
-    "twig": "^1.13.3"
+    "twig": "^1.13.3",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.51",
@@ -41,8 +44,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.51",
     "@electron-forge/maker-zip": "^6.0.0-beta.51",
     "@electron-forge/publisher-github": "^6.0.0-beta.51",
-    "@forsaken87/gaming-buddy-plugins": "^1.0.6",
-    "electron": "^6.1.12"
+    "electron": "^9.0.4"
   },
   "config": {
     "forge": {
@@ -88,8 +90,15 @@
         {
           "name": "@electron-forge/maker-flatpak",
           "config": {
-            "bin": "gaming-buddy",
-            "id": "com.forsaken87.gamingbuddy"
+            "options": {
+              "bin": "gaming-buddy",
+              "id": "com.forsaken87.gamingbuddy",
+              "categories": [
+                "Game",
+                "Utility"
+              ],
+              "icon": "data/logo256.png"
+            }
           }
         },
         {

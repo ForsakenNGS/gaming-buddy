@@ -1,0 +1,70 @@
+.navbar-main-menu {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+}
+.navbar-main-menu .navbar-nav {
+    -webkit-app-region: no-drag;
+}
+.navbar-main-menu .navbar-brand-icon {
+    height: 32px;
+}
+
+.content {
+    position: absolute;
+    overflow: auto;
+    left: 0;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+}
+
+.content.debug-enabled {
+    bottom: 32px;
+}
+
+.debug-bar {
+    position: absolute;
+    overflow: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32px;
+}
+
+.app-config .nav {
+    margin: 1em -1px 1em 0;
+}
+.app-config .nav .nav-link.active {
+    background-color: #4b535a;
+    border: 1px solid #000000;
+    border-right: none;
+    border-radius: 6px 0px 0px 6px;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+.app-config .nav .nav-link {
+    color: #f8f9fa;
+}
+.app-config .tab-content {
+    background-color: #4b535a;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    height: 100%;
+    overflow: auto;
+    padding: 20px;
+}
+
+.config-group h3 input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.debug-layout-tabs {
+    max-height: 720px;
+    overflow-y: auto;
+}
+
+.debug-layout-tab-pane img {
+    max-height: 400px;
+}

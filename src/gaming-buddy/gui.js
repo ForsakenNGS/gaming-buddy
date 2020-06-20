@@ -83,6 +83,9 @@ class Gui extends EventEmitter {
                     this.setPage("core::debug"); // Refresh debug view
                 }
                 break;
+            case "page.set":
+                this.setPage(...parameters);
+                break;
             case "plugin.config":
                 this.setConfigFull(parameters[0], parameters[1]);
                 break;
@@ -140,6 +143,9 @@ class Gui extends EventEmitter {
                 } else {
                     callback(html);
                     this.emit("element.rendered", variables.guiElement.__dom, templateFile, variables, html);
+                    this.sendMessage("core", "element.rendered", {
+                        template: templateFile, variables: variables, html: html
+                    });
                 }
             });
         }
@@ -156,6 +162,9 @@ class Gui extends EventEmitter {
                 console.error(error);
             } else {
                 jQuery(".page").html(html);
+                this.sendMessage("core", "page.rendered", {
+                    template: templateFile, variables: variables, html: html
+                });
             }
         });
     }
